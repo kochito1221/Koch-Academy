@@ -2,11 +2,29 @@
 session_start();
 
 $error = '';
+$host = 'localhost'; // Change if your DB is hosted elsewhere
+$dbname = 'koch_academy';
+$dbuser = 'your_db_username'; // Replace with your DB username
+$dbpass = 'your_db_password'; // Replace with your DB password
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $dbuser, $dbpass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
     $password = trim($_POST['password'] ?? '');
-    // Fake authentication (replace with DB logic)
-    if ($username === 'student' && $password === 'academy123') {
+
+    // Query the users table
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE username = :username');
+    $stmt->execute(['username' => $username]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Verify user exists and password matches
+    if ($user && password_verify($password, $user['password'])) {
         $_SESSION['username'] = $username;
         header('Location: index.html');
         exit();
