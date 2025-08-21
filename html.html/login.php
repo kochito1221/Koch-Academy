@@ -3,7 +3,7 @@ session_start();
 
 $error = '';
 $host = 'localhost'; // Change if your DB is hosted elsewhere
-$dbname = 'koch_academy';
+$dbname = 'koch academy';
 $dbuser = 'your_db_username'; // Replace with your DB username
 $dbpass = 'your_db_password'; // Replace with your DB password
 
@@ -74,3 +74,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </body>
 </html>
+
